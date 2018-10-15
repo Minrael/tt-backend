@@ -1,6 +1,7 @@
 import unittest
 
 class Item():
+    '''An element of list'''
 
     def __init__(self, elem, prev_item=None, next_item=None):
         self.elem = elem
@@ -8,14 +9,16 @@ class Item():
         self.next_item = next_item
 
 class DoubleLinkedList():
+    '''for sequence'''
 
     def __init__(self, first=None, last=None):
         self.first = first
         self.last = last
         self.length = 0
 
-#Add element at the end of the list
+
     def push(self, elem):
+        '''Add element at the end of the list'''
         new_item = Item(elem)
         self.length += 1
         if self.first is None:
@@ -26,20 +29,22 @@ class DoubleLinkedList():
             self.last.next_item = new_item
             self.last = new_item
 
-#Delete element from the end of the list
+
     def pop(self):
+        '''Delete element from the end of the list'''
         if self.first is None:
             print("List is already empty")
             return
         self.length -= 1
         if self.first is self.last:
-            self.first = self.last = None
+            self.first=self.last=None
         else:
             self.last = self.last.prev_item
             self.last.next_item = None
 
-#Add element at the beginning of the list
+
     def unshift(self, elem):
+        '''Add element at the beginning of the list'''
         new_item = Item(elem)
         if self.first is None:
             self.first = self.last = new_item
@@ -49,11 +54,11 @@ class DoubleLinkedList():
             self.first.next_item = self.first
             self.first = new_item
 
-#Delete element from the beginning of the list
+    
     def shift(self):
+        '''Delete element from the beginning of the list.'''
         if self.first is None:
             print("List is already empty")
-            return
         self.length -= 1
         if self.first.next_item is self.last:
             self.first = self.last = None
@@ -62,13 +67,15 @@ class DoubleLinkedList():
             self.first = self.first.next_item
 
 
-#Counting of lst's length
+
     def len(self):
+        '''Counting of lst's length.'''
         return self.length
 
 
-#Delete element from the list
+
     def delete(self, elem):
+        '''Delete element from the list.'''
         ind_elem = self.first
         while (ind_elem.next_item is not None):
             if (ind_elem.elem is not elem):
@@ -91,8 +98,9 @@ class DoubleLinkedList():
                 print("element not found")
 
 
-#Chacks that the lest contains the element
+
     def contains(self, elem):
+        """Chacks that the lest contains the element."""
         ind_elem = self.first
         while (ind_elem.next_item is not None):
             if (ind_elem.elem is elem):
@@ -104,11 +112,13 @@ class DoubleLinkedList():
                 print("element not found")
                 return False
 
-#Return the first element of the list
+
     def first():
+        """Return the first element of the list"""
         return self.first.elem
-#Return the last element of the list
+
     def last():
+        """Return the last element of the list"""
         return self.last.elem
 
 #Print all elements
@@ -122,9 +132,11 @@ class DoubleLinkedList():
 if __name__ == '__main__':
 
         list_1 = DoubleLinkedList()
-        list_1.push(1)
-        list_1.push(2)
-        list_1.first()
+        list_1.unshift(1)
+        list_1.unshift(2)
+        list_1.unshift(3)
+        list_1.unshift(4)
+        print(list_1.last())
 
 
 
