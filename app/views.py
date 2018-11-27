@@ -1,7 +1,22 @@
 from flask import request, abort, jsonify, json
-from app import app
+from app import app, jsonrpc
+from .models import *
+
 
 @app.route('/')
+
+@app.route('/messages/')
+def messages():
+  message_id = int(request.args.get('message_id'))
+  messages = model.list_messages_by_chat(message_id)
+  return jsonify(messages)
+
+#@app.route('/search_users/')
+#def search_users():
+#  id = search_user()
+#  response = app.response_class( response = id, status=200 )
+#  return response
+
 @app.route('/<string:name>')
 def index(name="world"):
     return "Hello, {}!".format( name )
