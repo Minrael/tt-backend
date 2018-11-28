@@ -1,4 +1,4 @@
-from .db import *
+from .db import query_one
 
 
 
@@ -21,7 +21,7 @@ def create_chat2():
 #""")
 
 def list_messages_by_chat(message_id, limit):
-  return db.query_one("""
+  return query_one("""
      SELECT user_id
      FROM messages
      WHERE message_id = %(message_id)s
