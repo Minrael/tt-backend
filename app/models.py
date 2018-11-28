@@ -1,17 +1,18 @@
 from .db import *
 
-
-
-
-
-def list_chats2():
-	pass
+def list_chats_db():
+	return query_all("""	
+	SELECT chat_id, topic 
+	FROM chats 
+        """)
 
 def create_chat(topic):
-	return insert_into_bd("""	
+    insert_into_bd("""	
 	INSERT INTO chats ( is_group_chat, topic, last_message )
 	VALUES (false, %(topic)s, '0');
-        """, topic = str(topic))
+    """, topic = str(topic))
+
+    commit_db()
 
 
 #Search user id by nick

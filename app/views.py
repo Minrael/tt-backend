@@ -55,8 +55,9 @@ def user_profile(username):
 
 @app.route('/list_chats/')
 def list_chats():
-  user_chats_array = ['Football', '204', 'Cyclades']
-  user_chats = json.dumps(user_chats_array)
+#  user_chats_array = ['Football', '204', 'Cyclades']
+#  user_chats = json.dumps(user_chats_array)
+  user_chats = json.dumps(list_chats_db())
   response = app.response_class(
       response = user_chats,
       mimetype='application/json',
@@ -105,9 +106,6 @@ def new_contact():
 """
     else:
       return 
-
-
-
 
 @app.route('/chats/create_pers_chat/', methods=['GET', 'POST'])
 def create_pers_chat():

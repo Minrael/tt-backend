@@ -38,6 +38,13 @@ def insert_into_bd(sql, **params):
     with get_cursor() as cur:
         cur.execute(sql, params)
 
+def commit_db():
+    if hasattr(flask.g, 'dbconn'):
+       conn = flask.g.dbconn
+       conn.commit()
+       conn.close()
+       delattr(flask.g, 'dbconn')
+
 
 #flask.got_request_exception.connect(_rollback_db, app)
 
