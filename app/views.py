@@ -120,9 +120,10 @@ def create_pers_chat():
       </body></html>
       """
     else:
-      rv = jsonify(request.form)
-      return rv
-      return 
+      topic = request.form['friend_name']
+      create_chat(topic)
+      return 'ok'
+
 
 @app.route('/chats/create_group_chat/', methods=['GET', 'POST'])
 def create_group_chat():

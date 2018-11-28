@@ -34,6 +34,11 @@ def query_all(sql, **params):
         row = [index[0] for index in cur.fetchall()]
         return row
 
+def insert_into_bd(sql, **params):
+    with get_cursor() as cur:
+        cur.execute(sql, params)
+
+
 #flask.got_request_exception.connect(_rollback_db, app)
 
 

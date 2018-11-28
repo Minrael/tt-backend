@@ -7,8 +7,11 @@ from .db import *
 def list_chats2():
 	pass
 
-def create_chat2():
-	pass
+def create_chat(topic):
+	return insert_into_bd("""	
+	INSERT INTO chats ( is_group_chat, topic, last_message )
+	VALUES (false, %(topic)s, '0');
+        """, topic = str(topic))
 
 
 #Search user id by nick
