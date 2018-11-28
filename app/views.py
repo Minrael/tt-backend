@@ -1,15 +1,19 @@
 from flask import request, abort, jsonify, json
 from app import app, jsonrpc
+import json
 from .models import *
 
 
 @app.route('/')
+def index_page():
+  return "Hello!"
 
 @app.route('/messages/')
 def messages():
-  message_id = int(request.args.get('message_id'))
-  messages = model.list_messages_by_chat(message_id)
-  return jsonify(messages)
+  #message_id = int(request.args.get('message_id'))
+  console.log(2)
+  messages = models.list_messages_by_chat(1, 10)
+  return messages
 
 #@app.route('/search_users/')
 #def search_users():
