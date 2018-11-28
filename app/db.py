@@ -11,7 +11,6 @@ def get_connection():
         flask.g.dbconn = psycopg2.connect(
             database=BaseConfig.DB_NAME, host=BaseConfig.DB_HOST,
             user=BaseConfig.DB_USER, password=BaseConfig.DB_PASS)
-    print(3)
     return flask.g.dbconn
 
 def _rollback_db(sender, exception, **extra):
@@ -22,14 +21,18 @@ def _rollback_db(sender, exception, **extra):
        delattr(flask.g, 'dbconn')
 
 def get_cursor():
-    print(2)
     return get_connection().cursor(cursor_factory=psycopg2.extras.DictCursor)
 
 def query_one(sql, **params):
     with get_cursor() as cur:
         cur.execute(sql, params)
-        print(1)
-        return cur.fetchone()
+        return str(cur.fetchone())
+
+def query_all(sql, **params):
+    with get_cursor() as cur:
+        cur.execute(sql, params)
+        row = [index[0] for index in cur.fetchall()]
+        return row
 
 #flask.got_request_exception.connect(_rollback_db, app)
 

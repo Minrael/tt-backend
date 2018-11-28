@@ -1,4 +1,4 @@
-from .db import query_one
+from .db import *
 
 
 
@@ -10,20 +10,25 @@ def list_chats2():
 def create_chat2():
 	pass
 
-#def search_user():
-#	return query_one("""	
 
-#	SELECT user_id 
-#	FROM users 
-#	WHERE nick='All';
-#	LIMIT %(limit)s;
+#Search user id by nick
+def search_user(nick):
+	return query_all("""	
+	SELECT user_id 
+	FROM users 
+	WHERE nick = %(nick)s;
+        """, nick = str(nick))
 
-#""")
+def all_users_name():
+	return query_all("""	
+	SELECT name 
+	FROM users 
+        """)
 
-def list_messages_by_chat(message_id, limit):
-  return query_one("""
-     SELECT user_id
+def list_messages_by_chat(user_id, limit):
+  return query_all("""
+     SELECT message_id
      FROM messages
-     WHERE message_id = %(message_id)s
-     LIMIT %(limit)s
-  """, message_id = int(message_id), limit = int(limit))
+     WHERE user_id = %(user_id)s
+     LIMIT %(limit)s;
+  """, user_id = int(user_id), limit = int(limit))

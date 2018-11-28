@@ -1,7 +1,7 @@
 from flask import request, abort, jsonify, json
 from app import app, jsonrpc
 import json
-from .models import list_messages_by_chat
+from .models import *
 
 
 
@@ -12,15 +12,38 @@ def index_page():
 @app.route('/messages/')
 def messages():
   #message_id = int(request.args.get('message_id'))
-  print(0)
   messages = list_messages_by_chat(1, 10)
-  return messages
+  return jsonify(messages)
 
-#@app.route('/search_users/')
-#def search_users():
-#  id = search_user()
-#  response = app.response_class( response = id, status=200 )
-#  return response
+@app.route('/search_user_by_nick/', methods=['GET', 'POST'])
+def search_user_by_nick():
+    if request.method =='GET':
+      return """<html><head></head><body>
+      <form method="POST" action="/search_user_by_nick/">
+         <input name="user_nick" >
+         <input type="submit" >
+      </form>
+      </body></html>
+      """
+    else:
+#      u_nick = jsonify(request.form['user_nick'])
+      u_nick = request.form['user_nick']
+      found_user_id = json.dumps(search_user(u_nick))
+      response = app.response_class(
+          response = found_user_id,
+          mimetype='application/json',
+          status=200
+      )
+    return response
+
+@app.route('/all_users/')
+def all_users():
+      response = app.response_class(
+          response = json.dumps(all_users_name()),
+          mimetype='application/json',
+          status=200
+      )
+      return response
 
 @app.route('/<string:name>')
 def index(name="world"):
@@ -94,8 +117,8 @@ def create_pers_chat():
          <input name="friend_name" >
          <input type="submit" >
       </form>
-</body></html>
-"""
+      </body></html>
+      """
     else:
       rv = jsonify(request.form)
       return rv
