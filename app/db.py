@@ -6,6 +6,8 @@ import psycopg2.extras
 import config
 from app import app
 
+
+
 def get_connection():
     if not hasattr(flask.g, 'dbconn'):
         flask.g.dbconn = psycopg2.connect(
@@ -47,10 +49,3 @@ def commit_db():
 
 
 #flask.got_request_exception.connect(_rollback_db, app)
-
-
-
-#TODO _commit_db
-
-#def commit_db():
-

@@ -1,0 +1,33 @@
+  ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    0.000    0.000    0.000    0.000 {built-in method builtins.print}
+        1    0.000    0.000    0.000    0.000 {method 'connect' of '_socket.socket' objects}
+        1    0.000    0.000    0.000    0.000 {method 'load' of '_pickle.Unpickler' objects}
+        1    0.000    0.000    0.000    0.000 {method 'sendall' of '_socket.socket' objects}
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/memcache.py:1246(_recv_value)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/_internal.py:190(__get__)
+       13    0.000    0.000    0.000    0.000 {method 'sort' of 'list' objects}
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/memcache.py:160(__init__)
+       12    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/routing.py:867(match_compare_key)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/routing.py:1261(bind_to_environ)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/routing.py:1443(match)
+       10    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/local.py:68(__getattr__)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/memcache.py:1070(_unsafe_get)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/memcache.py:1325(__init__)
+        6    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/local.py:160(top)
+       58    0.000    0.000    0.000    0.000 {built-in method builtins.len}
+        1    0.000    0.000    0.001    0.001 /home/maria/.local/lib/python3.6/site-packages/werkzeug/contrib/cache.py:409(get)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/flask/ctx.py:341(push)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/flask/ctx.py:383(pop)
+        4    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/routing.py:753(match)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/routing.py:1347(update)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/wrappers.py:1187(get_wsgi_headers)
+        1    0.000    0.000    0.000    0.000 /usr/lib/python3.6/encodings/__init__.py:71(search_function)
+       30    0.000    0.000    0.000    0.000 {built-in method builtins.isinstance}
+        2    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/memcache.py:1433(readline)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/memcache.py:1392(_get_socket)
+        1    0.000    0.000    0.002    0.002 /home/maria/.local/lib/python3.6/site-packages/flask/app.py:2262(wsgi_app)
+        1    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/wrappers.py:877(__repr__)
+       12    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/werkzeug/routing.py:888(build_compare_key)
+        2    0.000    0.000    0.000    0.000 /home/maria/.local/lib/python3.6/site-packages/flask/app.py:1997(create_url_adapter)
+
+

@@ -2,7 +2,7 @@ from .db import *
 
 def list_chats_db():
 	return query_all("""	
-	SELECT chat_id, topic 
+	SELECT topic 
 	FROM chats 
         """)
 
@@ -31,7 +31,7 @@ def all_users_name():
 
 def list_messages_by_chat(user_id, limit):
   return query_all("""
-     SELECT message_id
+     SELECT content
      FROM messages
      WHERE user_id = %(user_id)s
      LIMIT %(limit)s;
