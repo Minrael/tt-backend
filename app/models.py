@@ -1,38 +1,46 @@
-from .db import *
-
-def list_chats_db():
-	return query_all("""	
-	SELECT topic 
-	FROM chats 
-        """)
-
-def create_chat(topic):
-    insert_into_bd("""	
-	INSERT INTO chats ( is_group_chat, topic, last_message )
-	VALUES (false, %(topic)s, '0');
-    """, topic = str(topic))
-
-    commit_db()
+from app import db
 
 
-#Search user id by nick
-def search_user(nick):
-	return query_all("""	
-	SELECT user_id 
-	FROM users 
-	WHERE nick = %(nick)s;
-        """, nick = str(nick))
+class UserUser(db.Model):
+    id = db.Column(db.Integer, unique = True, nullable=False, primary_key=True)
+    name = db.Column(db.String(90), nullable=False)
+    nick = db.Column(db.String(90), unique = True, nullable=False)
 
-def all_users_name():
-	return query_all("""	
-	SELECT name 
-	FROM users 
-        """)
+    message = db.relationship('Message', backref = 'user_user', lazy=True)
+    member = db.relationship('Member', backref = 'user_user', lazy=True)
 
-def list_messages_by_chat(user_id, limit):
-  return query_all("""
-     SELECT content
-     FROM messages
-     WHERE user_id = %(user_id)s
-     LIMIT %(limit)s;
-  """, user_id = int(user_id), limit = int(limit))
+    def __init__(self, name, nick):
+        self.name=name
+        self.nick = nick
+
+class Chat(db.Model):
+    id = db.Column(db.Integer, unique = True, primary_key=True)
+    is_group_chat = db.Column(db.Boolean, nullable=False)
+    topic = db.Column(db.String(90), nullable=False)
+    last_message = db.Column(db.String(90))
+
+    message = db.relationship('Message', backref = 'chat_y', lazy=True)
+    member = db.relationship('Member', backref = 'chat', lazy=True)
+
+
+    def __init__(self, is_group_chat, topic):
+        self.is_group_chat=is_group_chat
+        self.topic = topic
+
+class Message(db.Model):
+    id = db.Column(db.Integer, unique = True, primary_key=True)
+    chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user_user.id'))
+    content = db.Column(db.String(500))
+
+    member = db.relationship('Member', backref = 'message', lazy=True)
+
+class Member(db.Model):
+    id = db.Column(db.Integer, unique = True, nullable=False, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user_user.id'))
+    chat_id = db.Column(db.Integer, db.ForeignKey('chat.id'))
+    new_messages = db.Column(db.Integer, nullable=False)
+    last_read_message_id = db.Column(db.Integer, db.ForeignKey('message.id'))
+
+
+

@@ -1,5 +1,6 @@
 node_modules/
 venv/
+driverChrom/
 instance/config.py
 *.pyc
 *.swo

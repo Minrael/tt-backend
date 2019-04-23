@@ -12,6 +12,7 @@ def get_connection():
     if not hasattr(flask.g, 'dbconn'):
         flask.g.dbconn = psycopg2.connect(
             database=BaseConfig.DB_NAME, host=BaseConfig.DB_HOST,
+ #           database=TestingConfig.DB_NAME, host=BaseConfig.DB_HOST,
             user=BaseConfig.DB_USER, password=BaseConfig.DB_PASS)
     return flask.g.dbconn
 

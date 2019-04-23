@@ -17,10 +17,14 @@ from flask_cache import Cache
 app = Flask(__name__)
 
 app.config['PROFILE']=True
-app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
+#app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[30])
 #profile_dir='profile/'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://back:back@localhost/back_orm'
+app.config.from_object('instance.config.ProductionConfig')
+#app.config.from_object('instance.config.DevelopmentConfig')
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://back:back@localhost/test_database'
+#app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://back:3NKHG9Oa@79.137.174.84/back'
+      #app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
@@ -34,6 +38,24 @@ jsonrpc = JSONRPC( app, '/api/')
 
 app.config.from_pyfile('../config.py')
 
+
+from celery import Celery
+
+#def make_celery(app):
+#  celery = Celery(
+#    app.import_name,
+#    backend = app.config['result_backend'],
+#    broker = app.config['broker_url']
+#  )
+#  celery.conf.update(app.config)
+
+#  class ContextTask(celery.Task):
+#    def __call__(self, *args, **kwargs):
+#      with app.app_context():
+#        return self.run(*args, **kwargs)
+
+#  celery.Task = ContextTask
+#  return celery
 
 
 from .views import *

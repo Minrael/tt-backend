@@ -5,36 +5,13 @@ import time
 from .models import *
 import random
 
-#from .models import User
+import socket
 
-#def profile( function):
-#  def wrapper(*args, **kwargs):
-#    profile_filename = "{}.prof".format( function.__name__)
-#    profiler = profiler_
-#    result = profiler.runcall(function, *args, **kwargs)
-#    profiler.damp_stats(profile_filename)
-#    return result
-#  return wrapper
+from .models import UserUser
+from .models import Chat
 
-
-
-#from functools import wraps
-#from flask import g, request, redirect, url_for
-
-#def login_required(f):
-#    @wraps(f)
-#    def decorated_function(*args, **kwargs):
-#        if g.user is None:
-#            return redirect(url_for('login', next=request.url))
-#        return f(*args, **kwargs)
-#    return decorated_function
-
-
-#@app.route('/secret_page/')
-#@login_required
-#def secret_page():
-#    pass
-
+from functools import wraps
+from flask import g, request, redirect, url_for
 
 #Caching function
 def item_name(name_for_cache):
@@ -49,42 +26,118 @@ def item_name(name_for_cache):
     return wrapper
   return get_my_item
 
+#@app.route('url_viewer')
+#def url_viewer():
+#  urls =['https://mail.ru', 'https://ya.ru', 'https://google.com']
+#  url = random.choice(urls)
+#  sock = socket.socket()
+  #sock.timeout(5)
+
+
 #Index page
 @app.route('/')
 def index_page():
-  time.sleep( 2 )
+  #time.sleep( 2 )
   return "Hello!"
 
-#Adds new chat in cahts(group=false)
-@app.route('/chats/create_pers_chat/', methods=['GET', 'POST'])
-def create_pers_chat():
+#Users profile
+@app.route('/user/<string:username>')
+def user_profile(username):
+  return 'User %s' % username
+
+#Create new user. Nick is unique
+@app.route('/user/create_new_user/', methods=['GET', 'POST'])
+def create_new_user():
     if request.method =='GET':
       return """<html><head></head><body>
-      <form method="POST" action="/chats/create_pers_chat/">
-         <input name="friend_name" >
+      <form method="POST" action="/create/user/">
+         <input name="name" >
+         <input name="nick" >
          <input type="submit" >
       </form>
       </body></html>
       """
     else:
-      topic = request.form['friend_name']
-      create_chat(topic)
-      cache_.delete('list_chats')
-      return 'ok'
+      name = request.form['name']
+      nick = request.form['nick']
+      user = UserUser(name, nick)
+      db.session.add(user)
+      db.session.commit()
+    
+    return jsonify(request.form)
 
+#Adds new chat in chats(group=false)
+@app.route('/chats/create_pers_chat/', methods=['GET', 'POST'])
+def create_pers_chat():
+    if request.method =='GET':
+      return """<html><head></head><body>
+      <form method="POST" action="/chats/create_pers_chat/">
+         <input name="chat_name" >
+         <input type="submit" >
+      </form>
+      </body></html>
+      """
+    else:
+      topic = request.form['chat_name']
+      chat = Chat(False, topic)
+#      member = Member(user, chat)
+      db.session.add(chat)
+      db.session.commit()
+      cache_.delete('list_chats')
+      return chat.topic
+
+#Adds new chat in chats(group=true)
+@app.route('/chats/create_group_chat/', methods=['GET', 'POST'])
+def create_group_chat():
+    if request.method =='GET':
+      return """<html><head></head><body>
+      <form method="POST" action="/chats/create_group_chat/">
+         <input name="chat_name" >
+         <input type="submit" >
+      </form>
+      </body></html>
+      """
+    else:
+      topic = request.form['chat_name']
+      chat = Chat(True, topic)
+      db.session.add(chat)
+      db.session.commit()
+      cache_.delete('list_chats')
+      return chat.topic
+
+def chat_to_json(chat):
+  res = {}
+  res['id'] = chat.id
+  res['topic'] = chat.topic
+  return res
    
 #Shows the list of chats topics(topic FROM chats) using cache
 @app.route('/list_chats/')
 @item_name('list_chats')
 def list_chats():
-  user_chats = json.dumps(list_chats_db())
-  response = app.response_class(
-      response = user_chats,
-      mimetype='application/json',
-      status=200
+  user_chats = Chat.query.all()
+  return jsonify([ chat_to_json(chat) for chat in user_chats])
 
-  )
-  return response
+
+@app.route('/search_user_by_nick/', methods=['GET', 'POST'])
+def search_user_by_nick():
+    if request.method =='GET':
+      return """<html><head></head><body>
+      <form method="POST" action="/search_user_by_nick/">
+         <input name="user_nick" >
+         <input type="submit" >
+      </form>
+      </body></html>
+      """
+    else:
+      u_nick = request.form['user_nick']
+      found_user_id = Chat.query.filter(User.nick(u_nick)).all()
+      response = app.response_class(
+          response = found_user_id,
+          mimetype='application/json',
+          status=200
+      )
+    return response
 
 #@app.route('/create/<string:name>')
 #def create_user(name):
@@ -94,31 +147,9 @@ def list_chats():
 #    db.session.commit()
 #    return first_name
 
-#@app.route('/create/user', methods=['GET', 'POST'])
-#def create_new_user():
-#    if request.method =='GET':
-#      return """<html><head></head><body>
-#      <form method="POST" action="/create/user">
-#         <input name="name" >
-#         <input name="nick" >
-#         <input type="submit" >
-#      </form>
-#      </body></html>
-#      """
-#    else:
-#      print(request.form)
-#      name = request.form['name']
-#      nick = request.form['nick']
-#      user = User(name, nick)
-#      db.session.add(user)
-#      db.session.commit()
-    
-#    return jsonify(request.form)
 
-#Users profile
-@app.route('/user/<string:username>')
-def user_profile(username):
-  return 'User %s' % username
+
+
 
 #Shows the list of users as JSON
 @app.route('/all_users/')
@@ -153,62 +184,7 @@ def list_contacts():
   )
   return response
 
-@app.route('/search_user_by_nick/', methods=['GET', 'POST'])
-def search_user_by_nick():
-    if request.method =='GET':
-      return """<html><head></head><body>
-      <form method="POST" action="/search_user_by_nick/">
-         <input name="user_nick" >
-         <input type="submit" >
-      </form>
-      </body></html>
-      """
-    else:
-#      u_nick = jsonify(request.form['user_nick'])
-      u_nick = request.form['user_nick']
-      found_user_id = json.dumps(search_user(u_nick))
-      response = app.response_class(
-          response = found_user_id,
-          mimetype='application/json',
-          status=200
-      )
-    return response
 
-@app.route('/form/', methods=['GET', 'POST'])
-def form():
-    if request.method =='GET':
-      return """<html><head></head><body>
-      <form method="POST" action="/form/">
-         <input name="first_name" >
-         <input name="last_name" >
-         <input type="submit" >
-      </form>
-</body></html>
-"""
-    else:
-      rv = jsonify(request.form)
-      return rv
-
-#@app.route('/chats/create_group_chat/', methods=['GET', 'POST'])
-#def create_group_chat():
-#   if request.method =='GET':
-#      return """<html><head></head><body>
-#      <form method="POST" action="/form/">
-#         <input name="chat_name" >
-#         <input type="submit" >
-#     </form>
-#</body></html>
-#"""
-#    else:
-#      rv = jsonify(request.form)
-#      return rv
-#      return 
-
-#Cache test
-#@cache.memoize()
-#def get_random( num ):
-#    print("get_random")
-#   return random.randint(0, num)
 
 #@app.route('/<string:name>')
 #def index(name="world"):
@@ -268,11 +244,28 @@ def form():
 #  return response.get('Body')
 
 
-#@app.route('/chats/add/', methods=['GET', 'POST'])
-#def new_chat():
 
-#return 
+#def profile( function):
+#  def wrapper(*args, **kwargs):
+#    profile_filename = "{}.prof".format( function.__name__)
+#    profiler = profiler_
+#    result = profiler.runcall(function, *args, **kwargs)
+#    profiler.damp_stats(profile_filename)
+#    return result
+#  return wrapper
 
 
+#def login_required(f):
+#    @wraps(f)
+#    def decorated_function(*args, **kwargs):
+#        if g.user is None:
+#            return redirect(url_for('login', next=request.url))
+#        return f(*args, **kwargs)
+#    return decorated_function
 
+
+#@app.route('/secret_page/')
+#@login_required
+#def secret_page():
+#    pass
 

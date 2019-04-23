@@ -12,6 +12,6 @@ def hello():
   print("Hello, Maria!")
 
 if __name__ =="__main__":
-  app.run(debug=False)
-  #manager.run()
+  #app.run(debug=False)
+  manager.run()
 
